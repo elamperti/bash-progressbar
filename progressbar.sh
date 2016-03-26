@@ -33,6 +33,7 @@ progressbar() {
     if [ ${1,,} == "finish" ]; then
         local pb_total=100
         local pb_count=$pb_total
+        local is_finishing=1
         if [ -z "$2" ]; then
             local pb_message=$pb_done_msg
         else
@@ -60,10 +61,14 @@ progressbar() {
     get_cur_pos pb_origin
     tput rc
     tput el
-    echo -ne "  ["
-    printf %${completeness}s |tr " " $pb_prog_char
-    printf %$((${completeness}-${pb_width}))s |tr " " $pb_fill_char
-    echo -e "] (`printf "%-3s" ${percentage}`%) $pb_message"
+    if [ -n "$is_finishing" ]; then
+      echo "$pb_message"
+    else
+      echo -ne "  ["
+      printf %${completeness}s |tr " " $pb_prog_char
+      printf %$((${completeness}-${pb_width}))s |tr " " $pb_fill_char
+      echo -e "] (`printf "%-3s" ${percentage}`%) $pb_message"
+    fi
     tput cup ${pb_origin[0]} ${pb_origin[1]}
     tput cud 1
     tput cnorm
