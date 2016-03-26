@@ -56,7 +56,6 @@ progressbar() {
     tput civis
     if [ -n "$is_starting" ]; then
         tput sc
-        echo $(date)
     fi
     get_cur_pos pb_origin
     tput rc
